@@ -1,0 +1,6 @@
+{% extends "master.html" %}
+{% block content %}
+  <h1>Order Successful</h1>
+  <p>Thank you, {{ order.customer_name }}! Your payment has been received.</p>
+  <a href="{% url 'cyber_service_list' %}" class="btn btn-primary">Back to Services</a>
+{% endblock %}

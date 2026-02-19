@@ -1,0 +1,33 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Robotics | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>🤖 Robot Status</h2>
+  <div class="card shadow-sm p-4">
+    <p><strong>Model:</strong> {{ robot.get_model_name_display }}</p>
+    <p><strong>Battery Level:</strong> {{ robot.battery_level }}%</p>
+    <p><strong>Working Hours:</strong> {{ robot.working_hours }}/{{ robot.working_hours_limit }}</p>
+    <p><strong>Status:</strong>
+      {% if robot.is_active %}
+        <span class="text-success">Active</span>
+      {% else %}
+        <span class="text-danger">Inactive (Recharge Required)</span>
+      {% endif %}
+    </p>
+    <p><strong>Last Updated:</strong> {{ robot.last_checked|date:"D d M Y H:i" }}</p>
+
+    <form method="post">
+      {% csrf_token %}
+      {% if robot.is_active %}
+        <button type="submit" name="simulate" class="btn btn-primary">Simulate 1 Hour Work</button>
+      {% else %}
+        <button type="submit" name="recharge" class="btn btn-warning">Recharge Robot</button>
+      {% endif %}
+    </form>
+  </div>
+</div>
+{% endblock %}

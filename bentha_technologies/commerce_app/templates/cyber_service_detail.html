@@ -1,0 +1,101 @@
+{% extends "master.html" %}
+{% block content %}
+<div class="container mt-5">
+    <!-- Header Section -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h2>{{ service.name }}</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Service Details -->
+                    <div class="text-center">
+                        <h4 class="text-success">Price: Ksh {{ service.price }}</h4>
+                        <p>Duration: {{ service.duration }} minutes</p>
+                        <p>{{ service.description }}</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-center my-3">
+                        <a href="{% url 'cyber_service_edit' service.pk %}" class="btn btn-outline-secondary me-2">
+                            <i class="fas fa-edit"></i> Edit Service
+                        </a>
+                        <a href="{% url 'cyber_service_list' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Back to Services
+                        </a>
+                    </div>
+
+                    <!-- Rating and Reviews -->
+                    <hr>
+                    <h5 class="text-center">Customer Ratings</h5>
+                    <div class="text-center">
+                        <!-- Star Rating -->
+                        <div class="mb-3">
+                            <span class="text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </span>
+                            <p>4.2/5 (120 Reviews)</p>
+                        </div>
+                    </div>
+
+                    <!-- Customer Testimonials -->
+                    <hr>
+                    <h5 class="text-center">Customer Testimonials</h5>
+                    <div class="testimonials my-3">
+                        <blockquote class="blockquote">
+                            <p class="mb-0">"Great service! The team was efficient and very helpful. Highly recommended!"</p>
+                            <footer class="blockquote-footer">John Doe</footer>
+                        </blockquote>
+                        <blockquote class="blockquote">
+                            <p class="mb-0">"Affordable and professional. Will definitely use this service again!"</p>
+                            <footer class="blockquote-footer">Jane Smith</footer>
+                        </blockquote>
+                    </div>
+
+                    <!-- Frequently Asked Questions (FAQs) -->
+                    <hr>
+                    <h5 class="text-center">Frequently Asked Questions</h5>
+                    <div id="faq" class="accordion my-3">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                                    What is included in this service?
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1">
+                                <div class="accordion-body">
+                                    This service includes a comprehensive analysis and resolution for common cyber issues.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                    How long does it take to complete?
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2">
+                                <div class="accordion-body">
+                                    The service typically takes {{ service.duration }} minutes to complete.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Button -->
+                    <div class="text-center mt-4">
+                        <a href="{% url 'cyber_service_order' service.pk %}" class="btn btn-lg btn-success">
+                            <i class="fas fa-shopping-cart"></i> Order This Service
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

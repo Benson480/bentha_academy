@@ -1,0 +1,64 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Enroll Students | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<div class="container" id="printContent">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="text-center mb-0"><i class="fas fa-user-graduate"></i> Enroll Student</h1>
+                    <h2 class="text-center mb-0">Bentha Technologies Computer Training Centre</h2>
+                </div>
+                
+                <div class="card-body">
+                    <form id="enrollForm" method="POST" action="{% url 'enroll_student' %}" class="mt-4">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <div class="row">
+                            <div class="col text-center">
+                                <button type="submit" class="btn btn-success">Enroll</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Print Button -->
+<div class="row mt-3">
+    <div class="col text-center">
+        <button type="button" class="btn btn-primary" onclick="printContent()">Print Form</button>
+    </div>
+</div>
+
+<script>
+    // Function to print the content
+    function printContent() {
+        var printWindow = window.open('', '_blank');
+        var content = document.getElementById('printContent').innerHTML;
+        printWindow.document.open();
+        printWindow.document.write('<html><head><title>Enroll Students | Bentha Technologies</title></head><body>' + content + '</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+
+    // Add a function to clear the form after submission
+    function clearForm() {
+        document.getElementById("enrollForm").reset();
+    }
+
+    document.getElementById('enrollForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        if (confirm('Are you sure you want to enroll this student?')) {
+            this.submit(); // Submit the form if user confirms
+            clearForm(); // Clear the form after submission
+        }
+    });
+</script>
+
+{% endblock %}

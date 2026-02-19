@@ -1,0 +1,6 @@
+{% extends "master.html" %}
+{% block content %}
+  <h1>Payment Failed</h1>
+  <p>Unfortunately, we couldn't process your payment. Please try again.</p>
+  <a href="{% url 'cyber_service_order' order.service.id %}" class="btn btn-primary">Retry Payment</a>
+{% endblock %}

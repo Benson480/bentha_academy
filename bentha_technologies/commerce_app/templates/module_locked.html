@@ -1,0 +1,18 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Module Locked
+{% endblock %}
+
+{% block content %}
+<section class="module-locked">
+    <div class="container">
+        <header class="header">
+            <h1>Access Denied</h1>
+            <p>{{ message }}</p>
+        </header>
+        <p>Please complete the previous module to proceed.</p>
+        <a href="{% url 'learning_management_platform' exam.course.id %}" class="btn btn-outline-primary me-2">Back to Course</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Take Quiz | {{ quiz.title }}
+{% endblock %}
+
+{% block content %}
+
+
+
+<h1>Your Grades</h1>
+<table>
+    <tr>
+        <th>Quiz/Assignment</th>
+        <th>Score</th>
+        <th>Graded</th>
+    </tr>
+    {% for submission in submissions %}
+        <tr>
+            <td>
+                {% if submission.quiz %} Quiz: {{ submission.quiz.title }}
+                {% elif submission.assignment %} Assignment: {{ submission.assignment.title }}
+                {% elif submission.exam %} Exam: {{ submission.exam.title }}
+                {% endif %}
+            </td>
+            <td>{{ submission.score }}</td>
+            <td>{{ submission.graded }}</td>
+        </tr>
+    {% endfor %}
+</table>

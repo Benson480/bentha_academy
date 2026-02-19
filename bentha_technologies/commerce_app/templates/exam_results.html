@@ -1,0 +1,47 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <!-- Exam Title -->
+            <h1 class="card-title text-center display-5">{{ exam.title }}</h1>
+            <p class="text-muted text-center">
+                <i class="bi bi-calendar-event"></i> Exam Date: {{ submission.created_at|date:"F j, Y, g:i a" }}
+            </p>
+            <hr>
+
+            {% if submission %}
+                <!-- Score Section -->
+                <div class="text-center my-4">
+                    <h2 class="fw-bold text-success">Your Results</h2>
+                    <p class="lead">
+                        <strong>Score:</strong> {{ submission.score }} / {{ exam.max_score }}
+                    </p>
+                    <p class="lead">
+                        <strong>Percentage:</strong> {{ percentage_score }}%
+                    </p>
+                </div>
+
+                <!-- Navigation -->
+                <div class="d-flex justify-content-center mt-4">
+                    <a href="{% url 'learning_management_platform' exam.course.id %}" class="btn btn-outline-primary me-2">
+                        <i class="bi bi-arrow-left"></i> Back to Course
+                    </a>
+                </div>
+            {% else %}
+                <!-- No Submission -->
+                <div class="alert alert-warning text-center">
+                    <h5>No Submission Found</h5>
+                    <p>You haven’t submitted this exam yet.</p>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{% url 'exam_list' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Exams
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}Bentha Academy LMS{% endblock %}</title>
+
+<link rel="icon" href="{% static 'images/logo.png' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<style>
+body, html {margin:0;font-family:'Segoe UI',sans-serif;background:#eef3f8}
+
+/* ===== TOP NAV ===== */
+.topnav{
+position:fixed;top:0;width:100%;
+background:linear-gradient(135deg,#0077b6,#00b4d8);
+color:white;z-index:1001;
+display:flex;align-items:center;
+padding:10px 18px;box-shadow:0 4px 12px rgba(0,0,0,.15);
+flex-wrap:wrap;
+}
+
+.topnav a{color:white;text-decoration:none;margin-right:18px;font-weight:500}
+
+.menu-toggle{
+background:#0096c7;border:none;color:white;
+padding:6px 10px;border-radius:6px;font-size:18px;display:none;
+}
+
+.nav-left{display:flex;align-items:center;flex-wrap:wrap}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+
+/* SEARCH */
+.search-box{background:white;border-radius:20px;padding:4px 12px}
+.search-box input{border:none;outline:none;width:150px}
+
+/* BADGES */
+.badge-notify{
+position:absolute;top:-5px;right:-8px;
+background:red;color:white;font-size:10px;
+border-radius:50%;padding:2px 5px;
+}
+
+/* PROFILE */
+.profile-picture{
+width:40px;height:40px;border-radius:50%;
+overflow:hidden;cursor:pointer;flex-shrink:0;
+}
+.profile-img{width:100%;height:100%;object-fit:cover}
+
+.user-profile-details{
+display:none;position:fixed;top:60px;right:20px;
+width:280px;background:white;padding:15px;
+border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.2);
+z-index:9999;
+}
+
+/* ===== SIDEBAR ===== */
+.sidenav{
+position:fixed;top:60px;left:0;width:250px;
+height:calc(100% - 60px);background:#024d8a;
+color:white;overflow-y:auto;transition:.3s;padding-top:15px;
+z-index:1000;
+}
+
+.sidenav .nav-link{
+padding:13px 20px;color:#e5e7eb;
+display:flex;align-items:center;font-weight:500;
+}
+.sidenav .nav-link i{margin-right:12px}
+
+.sidenav .nav-link:hover,
+.sidenav .nav-link.active{background:#1e293b;color:white}
+
+/* SUBMENU */
+.submenu{background:#020617;max-height:0;overflow:hidden;transition:.4s}
+.submenu.show{max-height:900px}
+.submenu .nav-link{padding-left:45px;font-size:14px}
+
+/* ===== CONTENT ===== */
+.content{
+margin-left:250px;margin-top:60px;padding:30px;
+min-height:calc(100vh - 60px);background:#eef3f8;
+}
+
+/* FOOTER */
+footer{background:#0f172a;color:white;text-align:center;padding:14px}
+
+/* ===== OVERLAY ===== */
+.overlay{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,.4);display:none;z-index:999;
+}
+.overlay.show{display:block}
+
+/* ===== MOBILE ===== */
+@media(max-width:768px){
+
+.menu-toggle{display:block}
+
+/* NAV LEFT DROPDOWN */
+.nav-left{
+width:100%;display:none;flex-direction:column;margin-top:10px
+}
+.topnav.active .nav-left{display:flex}
+
+/* NAV RIGHT ALWAYS VISIBLE */
+.nav-right{width:100%;justify-content:space-between;margin-top:10px}
+
+/* SIDENAV MOBILE */
+.sidenav{left:-260px}
+.sidenav.show{left:0}
+
+/* CONTENT */
+.content{margin-left:0;margin-top:110px}
+
+/* SEARCH WIDTH */
+.search-box input{width:120px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- TOP NAV -->
+<div class="topnav" id="topnav">
+
+<button class="menu-toggle" onclick="toggleNav()">☰</button>
+
+<div class="nav-left">
+<a href="{% url 'dashboard' %}"><i class="fas fa-graduation-cap"></i> Dashboard</a>
+<a href="#"><i class="fas fa-book"></i> Courses</a>
+<a href="#"><i class="fas fa-user-graduate"></i> My Learning</a>
+<a href="#"><i class="fas fa-chart-line"></i> Progress</a>
+</div>
+
+<div class="nav-right">
+
+<div class="search-box mr-3">
+<input type="text" placeholder="Search courses...">
+</div>
+
+<div class="mr-4 position-relative">
+<i class="fas fa-bell fa-lg"></i>
+<span class="badge-notify">3</span>
+</div>
+
+<div class="mr-4 position-relative">
+<i class="fas fa-envelope fa-lg"></i>
+<span class="badge-notify">2</span>
+</div>
+
+<div class="profile-picture" onclick="toggleProfile()">
+<img src="{% if user_profile and user_profile.profile_picture %}{{ user_profile.profile_picture.url }}{% else %}{% static 'images/default_image.png' %}{% endif %}" class="profile-img">
+</div>
+
+</div>
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleNav()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidenav" id="sidenav">
+<ul class="nav flex-column">
+<li><a class="nav-link active" href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Dashboard</a></li>
+
+<li class="has-submenu">
+<a class="nav-link"><i class="fas fa-book-open"></i> Courses <i class="fas fa-chevron-down ml-auto"></i></a>
+<ul class="submenu">
+<li><a class="nav-link" href="#">Browse Courses</a></li>
+<li><a class="nav-link" href="#">My Enrolled Courses</a></li>
+<li><a class="nav-link" href="#">Categories</a></li>
+</ul>
+</li>
+
+<li class="has-submenu">
+<a class="nav-link"><i class="fas fa-tasks"></i> Learning Activities <i class="fas fa-chevron-down ml-auto"></i></a>
+<ul class="submenu">
+<li><a class="nav-link" href="#">Assignments</a></li>
+<li><a class="nav-link" href="#">Quizzes</a></li>
+<li><a class="nav-link" href="#">Certificates</a></li>
+</ul>
+</li>
+
+<li><a class="nav-link" href="#"><i class="fas fa-chart-pie"></i> Progress Analytics</a></li>
+<li><a class="nav-link" href="#"><i class="fas fa-comments"></i> Discussion Forum</a></li>
+<li><a class="nav-link" href="#"><i class="fas fa-video"></i> Live Classes</a></li>
+<li><a class="nav-link" href="#"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+<li><a class="nav-link" href="#"><i class="fas fa-download"></i> Resources</a></li>
+
+<li><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+</ul>
+</nav>
+
+<!-- PROFILE PANEL -->
+<div class="user-profile-details" id="profile-details">
+<h5><i class="fas fa-user-circle"></i> User Profile</h5>
+<p><strong>Name:</strong> {{ user_profile.full_name }}</p>
+<p><strong>Email:</strong> {{ user_profile.email }}</p>
+<p><strong>Phone:</strong> {{ user_profile.phone_number }}</p>
+<hr>
+
+<p><strong>Theme:</strong></p>
+<select class="form-control mb-2">
+<option>Light</option>
+<option>Dark</option>
+</select>
+
+<p><strong>Font Size:</strong></p>
+<select class="form-control mb-2">
+<option>Small</option>
+<option>Medium</option>
+<option>Large</option>
+</select>
+
+<hr>
+<a href="{% url 'logout' %}" class="btn btn-danger btn-sm btn-block">
+<i class="fas fa-sign-out-alt"></i> Logout
+</a>
+</div>
+
+<!-- CONTENT -->
+<main class="content">
+{% block content %}
+<h3>Welcome to Bentha Academy LMS</h3>
+<p>Start learning by enrolling in courses.</p>
+{% endblock %}
+</main>
+
+<footer>© 2026 Bentha Academy LMS — Modern Learning Platform</footer>
+
+<script>
+function toggleNav(){
+const sidenav=document.getElementById('sidenav');
+const overlay=document.getElementById('overlay');
+const topnav=document.getElementById('topnav');
+const visible=sidenav.classList.toggle('show');
+overlay.classList.toggle('show',visible);
+topnav.classList.toggle('active',visible);
+}
+function toggleProfile(){
+const p=document.getElementById('profile-details');
+p.style.display=p.style.display==='block'?'none':'block';
+}
+document.querySelectorAll('.has-submenu>.nav-link').forEach(link=>{
+link.addEventListener('click',function(e){
+e.preventDefault();
+this.nextElementSibling.classList.toggle('show');
+});
+});
+</script>
+
+</body>
+</html>

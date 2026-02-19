@@ -1,0 +1,28 @@
+Django==5.1
+django-allauth==65.2.0
+asgiref==3.8.1
+sqlparse==0.5.1
+tzdata==2024.1
+
+# Database
+psycopg2-binary
+
+# Static & media
+Pillow
+
+# Auth / Security
+PyJWT==2.9.0
+python-dotenv==1.2.1
+cryptography
+
+# HTTP / APIs (payments, shipping)
+requests==2.32.3
+
+# Templates
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+
+# Utilities
+typing_extensions==4.15.0
+tqdm==4.67.1
+PyYAML==6.0.3

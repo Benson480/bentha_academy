@@ -1,0 +1,337 @@
+{% extends "home_master.html" %}
+
+{% block title %}
+Bentha Academy | Online Courses & Learning Management Platform
+{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        font-family: 'Poppins', sans-serif;
+        background: #f9fbfd;
+        color: #333;
+    }
+
+    /* NAVIGATION */
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 30px;
+        background: #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+    .brand {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #4f46e5;
+        letter-spacing: 0.5px;
+    }
+    .login-btn, .signup-btn {
+        padding: 10px 22px;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: .3s;
+    }
+    .login-btn { background: #4f46e5; color: #fff; }
+    .login-btn:hover { background: #3730a3; }
+    .signup-btn { background: #22c55e; color: #fff; }
+    .signup-btn:hover { background: #16a34a; }
+
+    /* HERO SECTION */
+    .hero {
+        max-width: 1100px;
+        margin: 80px auto;
+        padding: 20px;
+        text-align: center;
+    }
+    .hero h2 {
+        font-size: 2.8rem;
+        color: #4f46e5;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .hero p {
+        font-size: 1.2rem;
+        color: #555;
+        line-height: 1.8;
+        max-width: 800px;
+        margin: auto;
+    }
+
+    /* COURSE CATEGORIES SECTION */
+    .categories {
+        padding: 60px 20px;
+        text-align: center;
+        background: #f0f4ff;
+    }
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
+        max-width: 1000px;
+        margin: auto;
+    }
+    .category-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: .3s;
+    }
+    .category-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.15);
+    }
+    .category-card h3 { color: #4f46e5; margin-bottom: 10px; }
+    .category-card p { color: #555; font-size: 0.95rem; }
+
+    /* COURSES SECTION */
+    .courses {
+        padding: 80px 20px;
+        background: #eef2ff;
+        text-align: center;
+    }
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+        max-width: 1200px;
+        margin: auto;
+    }
+    .course-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 30px 20px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        transition: .3s;
+        text-align: left;
+    }
+    .course-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    }
+    .course-card h3 { color: #4f46e5; margin-bottom: 10px; }
+    .course-card p { color: #555; margin-bottom: 15px; }
+    .course-card span { font-weight: 700; color: #16a34a; font-size: 1.1rem; }
+
+    /* PRICING SECTION */
+    .pricing {
+        padding: 80px 20px;
+        text-align: center;
+        background: #ffffff;
+    }
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 30px;
+        max-width: 1000px;
+        margin: auto;
+    }
+    .pricing-card {
+        background: #eef2ff;
+        border-radius: 14px;
+        padding: 35px 25px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        transition: .3s;
+    }
+    .pricing-card h3 { color: #4f46e5; margin-bottom: 15px; }
+    .pricing-card span { font-size: 2rem; font-weight: 700; color: #16a34a; display:block; margin-bottom:15px; }
+    .pricing-card ul { list-style: none; padding: 0; margin-bottom: 20px; }
+    .pricing-card ul li { margin: 10px 0; }
+    .pricing-card a {
+        background: #4f46e5;
+        color: #fff;
+        padding: 12px 35px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .3s;
+    }
+    .pricing-card a:hover { background:#3730a3; }
+
+    /* CTA SECTION */
+    .cta {
+        background: linear-gradient(120deg, #4f46e5, #6366f1);
+        color: #fff;
+        text-align: center;
+        padding: 80px 20px;
+    }
+    .cta a {
+        background: #22c55e;
+        padding: 12px 40px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        transition:.3s;
+        display: inline-block;
+        margin-top: 20px;
+    }
+    .cta a:hover {
+        background:#16a34a;
+        transform: scale(1.05);
+    }
+
+    /* FOOTER */
+    footer {
+        background: #111827;
+        color: #9ca3af;
+        padding: 50px 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+        gap: 20px;
+    }
+    footer h3 { color:#ffffff; margin-bottom: 10px; }
+    footer a { color:#60a5fa; text-decoration: none; }
+
+</style>
+
+<!-- NAV -->
+<div class="top-nav">
+    <span class="brand">Bentha Academy</span>
+    <div>
+        <a class="login-btn" href="{% url 'login' %}">Login</a>
+        <a class="signup-btn" href="#">Sign Up</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+    <h2>Learn, Grow, and Succeed Online</h2>
+    <p>Bentha Academy is your go-to online course platform. Access expertly curated courses, track your learning, and achieve new skills from the comfort of your home.</p>
+</section>
+
+<!-- COURSE CATEGORIES -->
+<section class="categories">
+    <h2 class="section-title">Course Categories</h2>
+    <div class="category-grid">
+        <div class="category-card">
+            <h3>Computer Packages</h3>
+            <p>Microsoft Office, Google Workspace, Excel, PowerPoint, Word, and other essential computer tools.</p>
+        </div>
+        <div class="category-card">
+            <h3>Programming & Development</h3>
+            <p>Full Stack Web Development, Python, Java, Django, and Mobile App Development.</p>
+        </div>
+        <div class="category-card">
+            <h3>Data & Analytics</h3>
+            <p>Data Science, SQL, Python for analytics, Machine Learning, and AI fundamentals.</p>
+        </div>
+        <div class="category-card">
+            <h3>Cybersecurity & Cloud</h3>
+            <p>Network security, ethical hacking, cloud computing, DevOps, and infrastructure management.</p>
+        </div>
+        <div class="category-card">
+            <h3>Digital Marketing</h3>
+            <p>SEO, social media marketing, email campaigns, and online business growth strategies.</p>
+        </div>
+    </div>
+</section>
+
+<!-- COURSES OFFERED -->
+<section class="courses">
+    <h2 class="section-title">Featured Courses</h2>
+    <div class="course-grid">
+        <div class="course-card">
+            <h3>Microsoft Excel Mastery</h3>
+            <p>Learn formulas, pivot tables, charts, and data analysis to become Excel proficient.</p>
+            <span>Ksh 8,000</span>
+        </div>
+        <div class="course-card">
+            <h3>Full Stack Web Development</h3>
+            <p>Master front-end and back-end development with hands-on projects using HTML, CSS, JS, and Django.</p>
+            <span>Ksh 20,000</span>
+        </div>
+        <div class="course-card">
+            <h3>Data Science & Analytics</h3>
+            <p>Python, SQL, R, machine learning, and data visualization to become a proficient data scientist.</p>
+            <span>Ksh 25,000</span>
+        </div>
+        <div class="course-card">
+            <h3>Cybersecurity Fundamentals</h3>
+            <p>Learn ethical hacking, network security, and cryptography essentials.</p>
+            <span>Ksh 18,000</span>
+        </div>
+        <div class="course-card">
+            <h3>Digital Marketing</h3>
+            <p>SEO, social media strategies, and online business growth techniques.</p>
+            <span>Ksh 15,000</span>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+    <h2 class="section-title">Pricing Plans</h2>
+    <div class="pricing-grid">
+        <div class="pricing-card">
+            <h3>Starter</h3>
+            <span>Ksh 10,000</span>
+            <ul>
+                <li>Access to 3 Courses</li>
+                <li>Progress Tracking</li>
+                <li>Community Support</li>
+            </ul>
+            <a href="#">Enroll Now</a>
+        </div>
+        <div class="pricing-card">
+            <h3>Professional</h3>
+            <span>Ksh 25,000</span>
+            <ul>
+                <li>Access to All Courses</li>
+                <li>Certificate of Completion</li>
+                <li>1-on-1 Mentorship</li>
+            </ul>
+            <a href="#">Enroll Now</a>
+        </div>
+        <div class="pricing-card">
+            <h3>Enterprise</h3>
+            <span>Custom</span>
+            <ul>
+                <li>Team & Corporate Access</li>
+                <li>Dedicated Support</li>
+                <li>Custom Learning Paths</li>
+            </ul>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <h2>Start Your Learning Journey Today</h2>
+    <p>Sign up now and gain instant access to world-class courses designed for your success.</p>
+    <a href="#">Get Started</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div>
+        <h3>Bentha Academy</h3>
+        <p>Empowering learners across Africa with online courses and digital skills.</p>
+        <p>&copy; <span id="year"></span> Bentha Academy</p>
+    </div>
+    <div>
+        <h3>Platform</h3>
+        <a href="#courses">Courses</a><br>
+        <a href="#pricing">Pricing</a><br>
+        <a href="{% url 'login' %}">Sign Up</a>
+    </div>
+    <div>
+        <h3>Support</h3>
+        <p><a href="mailto:support@benthaacademy.com">support@benthaacademy.com</a></p>
+    </div>
+</footer>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+{% endblock %}

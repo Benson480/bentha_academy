@@ -1,0 +1,276 @@
+{% extends "master.html" %}
+{% load static %}
+
+{% block title %}Secure Logout{% endblock %}
+
+{% block content %}
+<style>
+
+/* BACKGROUND */
+.logout-wrapper{
+min-height:90vh;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#0072ff,#00c6ff);
+padding:3rem;
+position:relative;
+overflow:hidden;
+}
+
+/* Floating shapes */
+.logout-wrapper:before,
+.logout-wrapper:after{
+content:"";
+position:absolute;
+border-radius:50%;
+background:rgba(255,255,255,0.15);
+filter:blur(40px);
+}
+
+.logout-wrapper:before{
+width:300px;height:300px;top:-50px;left:-50px;
+}
+.logout-wrapper:after{
+width:350px;height:350px;bottom:-80px;right:-80px;
+}
+
+/* MAIN CONTAINER */
+.logout-card{
+width:100%;
+max-width:1100px;
+display:grid;
+grid-template-columns:1fr 1fr;
+background:rgba(255,255,255,0.9);
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 30px 70px rgba(0,0,0,.35);
+animation:slideUp .6s ease;
+}
+
+/* ANIMATION */
+@keyframes slideUp{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+/* LEFT PANEL */
+.left-panel{
+background:linear-gradient(135deg,#005bea,#00c6fb);
+color:white;
+padding:3rem;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.left-panel h2{
+font-size:2rem;
+margin-bottom:1rem;
+}
+
+.security-box{
+background:rgba(255,255,255,0.15);
+padding:1.3rem;
+border-radius:12px;
+margin-top:1.5rem;
+font-size:.95rem;
+}
+
+/* RIGHT PANEL */
+.right-panel{
+padding:3rem;
+text-align:center;
+}
+
+/* Avatar */
+.user-avatar{
+width:90px;height:90px;
+border-radius:50%;
+background:#0072ff;
+color:#fff;
+font-size:2.3rem;
+font-weight:700;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:0 auto 1rem;
+overflow:hidden;
+}
+.user-avatar img{width:100%;height:100%;object-fit:cover}
+
+/* Text */
+.right-panel h1{
+font-size:2rem;
+color:#0a2540;
+margin-bottom:.5rem;
+}
+
+.right-panel p{
+color:#555;
+margin-bottom:1.5rem;
+}
+
+/* Timer */
+.session-timer{
+font-size:.95rem;
+color:#ff4d4d;
+font-weight:600;
+margin-bottom:1.5rem;
+}
+
+/* Buttons */
+.actions{
+display:flex;
+justify-content:center;
+gap:1rem;
+flex-wrap:wrap;
+}
+
+.logout-btn,.back-btn{
+border:none;
+padding:.8rem 2rem;
+border-radius:40px;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.logout-btn{
+background:#ff4d4d;
+color:white;
+box-shadow:0 6px 18px rgba(255,77,77,.5);
+}
+.logout-btn:hover{transform:translateY(-3px)}
+
+.back-btn{
+background:#eef3f8;
+}
+.back-btn:hover{background:#dde6f2}
+
+/* Spinner */
+.spinner{
+display:none;
+margin:1.5rem auto;
+border:4px solid #eee;
+border-top:4px solid #049b31;
+border-radius:50%;
+width:35px;height:35px;
+animation:spin 1s linear infinite;
+}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+/* Footer */
+.logout-footer{
+margin-top:2rem;
+font-size:.85rem;
+color:#888;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+.logout-card{
+grid-template-columns:1fr;
+}
+.left-panel{
+text-align:center;
+}
+}
+
+</style>
+
+<div class="logout-wrapper">
+
+<div class="logout-card">
+
+{% if request.user.is_authenticated %}
+
+<!-- LEFT SIDE -->
+<div class="left-panel">
+<h2>Session Security</h2>
+<p>Your account safety is our priority.</p>
+
+<div class="security-box">
+Last login:<br>
+{{ request.user.last_login|date:"M d, Y H:i" }}<br><br>
+
+IP Address:<br>
+{{ request.META.REMOTE_ADDR }}<br><br>
+
+Browser:<br>
+<span id="browser"></span>
+</div>
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="right-panel">
+
+<div class="user-avatar">
+{% if request.user.profile.profile_picture %}
+<img src="{{ request.user.profile.profile_picture.url }}">
+{% else %}
+{{ request.user.username|first|upper }}
+{% endif %}
+</div>
+
+<h1>Logout, {{ request.user.username }}?</h1>
+<p>Your session will end securely.</p>
+
+<div class="session-timer">
+Auto logout in <span id="timer">30</span> seconds
+</div>
+
+<form method="POST" onsubmit="startLogout()">
+{% csrf_token %}
+<div class="actions">
+<button class="logout-btn">Yes, Logout</button>
+<button type="button" class="back-btn" onclick="window.history.back()">Cancel</button>
+</div>
+</form>
+
+<div class="spinner" id="spinner"></div>
+
+<div class="logout-footer">
+© {{ request.META.HTTP_HOST }}
+</div>
+
+</div>
+
+{% else %}
+
+<div class="right-panel" style="grid-column:1/-1;">
+<h1>Session expired</h1>
+<p>You are not logged in.</p>
+<a href="{% url 'login' %}" class="logout-btn">Login again</a>
+</div>
+
+{% endif %}
+
+</div>
+</div>
+
+<script>
+function startLogout(){
+document.getElementById("spinner").style.display="block";
+}
+
+let seconds=30;
+let timer=document.getElementById("timer");
+
+if(timer){
+setInterval(()=>{
+seconds--;
+timer.textContent=seconds;
+if(seconds<=0) document.forms[0].submit();
+},1000);
+}
+
+document.getElementById("browser").innerText=navigator.userAgent;
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape") window.history.back();
+});
+</script>
+
+{% endblock %}

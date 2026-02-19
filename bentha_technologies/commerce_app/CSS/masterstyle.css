@@ -1,0 +1,402 @@
+
+/* styles.css */
+
+/* Default styles */
+html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content {
+            flex-grow: 1;
+        }
+
+        footer {
+            background-color: #462644;
+            color: #FFF;
+            text-align: center;
+            padding: 10px;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #333; /* Change background color for dark mode */
+    color: #fff; /* Change text color for dark mode */
+}
+
+/* Add specific styles for other elements that need to be adjusted for dark mode */
+body.dark-mode .content {
+    /* Adjust styles for the content area in dark mode */
+    background-color: #333; /* Change content background color for dark mode */
+    color: #fff; /* Change content text color for dark mode */
+}
+
+/* CSS for dark mode */
+.dark-mode {
+  background-color: #333; /* Set your dark background color */
+  color: #fff; /* Set your dark text color */
+}
+
+/* Additional CSS for dark mode, update as needed */
+.dark-mode a {
+  color: #fff; /* Set link color in dark mode */
+}
+
+.dark-mode select {
+  background-color: #444; /* Set select background color in dark mode */
+  color: #fff; /* Set select text color in dark mode */
+}
+
+/* You may need to adjust other styles for dark mode as well */
+
+/* Default styles for light mode */
+.user-profile-details {
+  background-color: #ffffff; /* Set your light background color */
+  color: #333; /* Set your light text color */
+}
+
+/* Dark mode styles */
+.dark-mode .user-profile-details {
+  background-color: #333; /* Set your dark background color */
+  color: #ffffff; /* Set your dark text color */
+}
+
+/* Additional default styles for light mode, update as needed */
+.user-profile-details a {
+  color: black; /* Set link color in light mode */
+}
+
+.user-profile-details select {
+  background-color: #f5f5f5; /* Set select background color in light mode */
+  color: #333; /* Set select text color in light mode */
+}
+
+
+
+  footer {
+    background-color: #7f0079;
+    color: #FFF;
+    text-align: center;
+    padding: 10px;
+    margin-top: auto; /* Push the footer to the bottom */
+  }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    header {
+      background-color: #7f0079; /* Change the header background color */
+      color: #FFF;
+      overflow: hidden;
+    }
+    .topnav {
+      background-color: #7f0079;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 9999;
+    }
+
+    .topnav a {
+      color: #fff;
+      display: inline-block;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    .search-container {
+      float: right;
+      margin-top: 10px;
+      margin-right: 70px;
+    }
+
+    .search-container input[type=text] {
+      padding: 6px;
+      border: none;
+      font-size: 14px;
+    }
+
+    .search-container button {
+      padding: 6px 10px;
+      background: #ccc;
+      border: none;
+      cursor: pointer;
+    }
+
+    .sidenav {
+      width: 200px;
+      height: 100%;
+      position: fixed;
+      top: 58px; /* Adjusted to accommodate the height of the topnav */
+      left: 0;
+      overflow-x: hidden;
+      padding-top: 20px;
+      z-index: 999; /* Increased z-index to ensure sidenav is displayed above content */
+      background-color: #7f0079;
+      transition: 0.5s; /* Added transition for smooth movement */
+    }
+
+    .sidenav a {
+      padding: 20px 8px 6px 16px;
+      text-decoration: none;
+      font-size: 15px;
+      color: white;
+      display: block;
+      height: auto;
+    }
+
+    .sidenav a:hover {
+      color: #0422aa;
+    }
+
+    .content {
+      margin-left: 200px;
+      padding: 16px;
+      margin-top: 50px;
+      /* overflow-y: auto; */
+      background-color: rgb(243, 248, 246);
+      background-size: cover;
+      transition: 0.5s; /* Added transition for smooth movement */
+    }
+
+    .highlight {
+      background-color: yellow;
+    }
+
+    /* Responsive Styles for Tablet and Phone Screens */
+    @media only screen and (max-width: 1024px) {
+      .sidenav {
+        position: relative;
+        top: 80px;
+        width: 100%;
+        height: auto;
+        padding-top: 0;
+      }
+
+      .content {
+        margin-left: 0;
+        margin-top: 0;
+        padding-top: 130px; /* Adjust the padding to make space for the fixed topnav */
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+      .topnav {
+        position: static;
+      }
+
+      .search-container {
+        float: none;
+        margin: 10px auto;
+        text-align: center;
+      }
+
+      .sidenav {
+        position: fixed;
+        left: -200px;
+        top: 58px; /* Adjusted to accommodate the height of the topnav */
+        width: 200px;
+        height: calc(100% - 58px);
+        transition: 0.5s;
+        z-index: 999;
+        background-color: #7f0079;
+      }
+
+      .sidenav a {
+        padding: 20px 8px 6px 16px;
+      }
+
+      .sidenav a:hover {
+        color: #f1f1f1;
+      }
+
+      .content {
+        margin-left: 0;
+        margin-top: 0;
+        padding-top: 80px; /* Adjust the padding to make space for the fixed topnav */
+      }
+
+      .sidenav.show {
+        left: 0;
+      }
+
+      /* Move content to the right when side navigation is shown */
+      .content.show {
+        margin-left: 200px;
+      }
+
+      /* Show the "show" button only when the screen is small */
+      .topnav .icon {
+        display: block;
+      }
+    }
+
+    /* Responsive Styles for Small Phone Screens */
+    @media only screen and (max-width: 400px) {
+      .sidenav,
+      .topnav.responsive .search-container {
+        position: static;
+        width: 100%;
+      }
+
+      .topnav.responsive a.icon {
+        position: relative;
+        display: inline-block;
+        margin-right: 10px;
+      }
+
+      .topnav.responsive .search-container {
+        margin: 10px 0;
+        padding: 0;
+        text-align: left;
+      }
+
+      .topnav.responsive .search-container input[type="text"],
+      .topnav.responsive .search-container button {
+        width: 100%;
+      }
+
+      .sidenav {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sidenav a {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+      }
+
+      .sidenav i {
+        margin-right: 0;
+        display: block;
+      }
+
+      .content {
+        margin-left: 0;
+        margin-top: 0;
+        padding-top: 80px; /* Adjust the padding to make space for the fixed topnav */
+      }
+    }
+    /* Add this media query to make the navigation full width on small screens */
+@media screen and (max-width: 600px) {
+  .topnav.responsive {
+    position: relative;
+  }
+
+  .topnav.responsive a.icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .topnav.responsive a:not(.icon) {
+    display: block;
+    text-align: left;
+  }
+
+  .topnav.responsive .search-container {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .topnav.responsive .search-container input[type="text"],
+  .topnav.responsive .search-container button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+/* Responsive Styles for 6.1-inch Phone Screen */
+@media only screen and (max-width: 720px) {
+  .topnav {
+    position: static;
+  }
+
+  .search-container {
+    float: none;
+    margin: 10px auto;
+    text-align: center;
+  }
+
+  .sidenav {
+    position: fixed;
+    left: -200px;
+    top: 58px;
+    width: 200px;
+    height: calc(100% - 58px);
+    transition: 0.5s;
+    z-index: 999;
+    background-color: #7f0079;
+  }
+
+  .sidenav a {
+    padding: 20px 8px 6px 16px;
+  }
+
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+
+  .content {
+    margin-left: 0;
+    margin-top: 0;
+    padding-top: 80px;
+  }
+
+  .sidenav.show {
+    left: 0;
+  }
+
+  .content.show {
+    margin-left: 200px;
+  }
+
+  .topnav .icon {
+    display: block;
+  }
+}
+.topnav.responsive a.icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.menu-item {
+    position: relative;
+    display: inline-block;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1; /* To ensure it appears above other elements */
+}
+
+.menu-item:hover .submenu {
+    display: block;
+}
+

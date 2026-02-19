@@ -1,0 +1,58 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Course Details | {{ course.name }}
+{% endblock %}
+
+{% block content %}
+<section class="course-details">
+    <div class="container">
+        <header class="header">
+            <h1>{{ course.name }}</h1>
+            <p>Instructor: {{ course.instructor }}</p>
+            <p>Start Date: {{ course.start_date }}</p>
+            <p>Status: {{ course.status }}</p>
+        </header>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Materials</h3>
+                <ul class="list-group">
+                    {% for material in materials %}
+                        <li class="list-group-item">{{ material.title }}</li>
+                    {% empty %}
+                        <li class="list-group-item">No materials available.</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Quizzes</h3>
+                <ul class="list-group">
+                    {% for quiz in quizzes %}
+                        <li class="list-group-item"><a href="{% url 'take_quiz' quiz.id %}">{{ quiz.title }}</a></li>
+                    {% empty %}
+                        <li class="list-group-item">No quizzes available.</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Assignments</h3>
+                <ul class="list-group">
+                    {% for assignment in assignments %}
+                        <li class="list-group-item"><a href="{% url 'submit_assignment' assignment.id %}">{{ assignment.title }}</a></li>
+                    {% empty %}
+                        <li class="list-group-item">No assignments available.</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Exams</h3>
+                <ul class="list-group">
+                    {% for exam in exams %}
+                        <li class="list-group-item"><a href="{% url 'take_exam' exam.id %}">{{ exam.title }}</a></li>
+                    {% empty %}
+                        <li class="list-group-item">No exams available.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

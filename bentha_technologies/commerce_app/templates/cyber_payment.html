@@ -1,0 +1,34 @@
+{% extends "master.html" %}
+{% block content %}
+  <div class="alert alert-info text-center">
+      Payment request sent. Please check your phone to complete the transaction.
+  </div>
+
+  <h1>Complete Payment for Order</h1>
+  <p>Amount: ${{ order.service.price }}</p>
+  <script src="https://js.stripe.com/v3/"></script>
+  <button id="pay-button" class="btn btn-primary">Pay Now</button>
+
+  <script>
+    var stripe = Stripe('{{ YOUR_STRIPE_PUBLISHABLE_KEY }}');
+    var clientSecret = '{{ client_secret }}';
+
+    document.getElementById('pay-button').addEventListener('click', function () {
+      stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: {
+            element: document.getElementById('card-element')
+          }
+        }
+      }).then(function (result) {
+        if (result.error) {
+          alert(result.error.message);
+        } else {
+          if (result.paymentIntent.status === 'succeeded') {
+            window.location.href = "{% url 'confirm_payment' order.pk %}";
+          }
+        }
+      });
+    });
+  </script>
+{% endblock %}

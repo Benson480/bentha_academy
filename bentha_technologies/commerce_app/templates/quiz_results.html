@@ -1,0 +1,90 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Quiz Results | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center">
+        <h2 class="display-4">{{ quiz.title }} Results</h2>
+        <p class="text-muted">Review your performance and aim for improvement!</p>
+    </div>
+    <div class="card shadow-lg mt-4">
+        <div class="card-body">
+            {% if submission %}
+                <div class="text-center">
+                    <h3>Your Score</h3>
+                    <h1 class="display-2 text-primary font-weight-bold">{{ submission.score }} / {{ quiz.max_score }}</h1>
+                    <p class="lead {% if percentage_score >= 75 %}text-success{% elif percentage_score >= 50 %}text-warning{% else %}text-danger{% endif %}">
+                        {{ percentage_score|floatformat:0 }}% - 
+                        {% if percentage_score >= 75 %}Excellent!{% elif percentage_score >= 50 %}Good Effort!{% else %}Keep Practicing!{% endif %}
+                    </p>
+                </div>
+
+                <!-- Enhanced Progress Bar -->
+                <div class="progress my-4" style="height: 30px;">
+                    <div class="progress-bar {% if percentage_score >= 75 %}bg-success{% elif percentage_score >= 50 %}bg-warning{% else %}bg-danger{% endif %}" 
+                         role="progressbar" 
+                         style="width: {{ percentage_score|floatformat:0 }}%;" 
+                         aria-valuenow="{{ submission.score }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="{{ quiz.max_score }}">
+                        <span class="font-weight-bold">{{ percentage_score|floatformat:0 }}%</span>
+                    </div>
+                </div>
+
+                <!-- Performance Feedback -->
+                <div class="text-center">
+                    <h4>Performance Feedback</h4>
+                    <p>
+                        {% if percentage_score >= 75 %}
+                            You're doing amazing! Keep up the great work.
+                        {% elif percentage_score >= 50 %}
+                            Good effort! Review the areas where you lost marks to improve further.
+                        {% else %}
+                            Don't give up! Practice more and come back stronger.
+                        {% endif %}
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-primary btn-lg">Retake Quiz</a>
+                    <a href="{% url 'learning_management_platform' course.id %}" class="btn btn-info btn-lg">Back to Learning</a>
+                    <a href="{% url 'quiz_list' %}" class="btn btn-secondary btn-lg">Browse Quizzes</a>
+                </div>
+
+                <!-- Detailed Breakdown -->
+                <div class="mt-5">
+                    <h4 class="mb-3">Question Breakdown</h4>
+                    <ul class="list-group">
+                        {% for question in submission.questions %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6>{{ question.text }}</h6>
+                                    <p class="mb-0 text-muted">Your Answer: {{ question.user_answer }}</p>
+                                    {% if question.is_correct %}
+                                        <p class="mb-0 text-success">Correct!</p>
+                                    {% else %}
+                                        <p class="mb-0 text-danger">Incorrect. Correct Answer: {{ question.correct_answer }}</p>
+                                    {% endif %}
+                                </div>
+                                <span class="badge badge-{% if question.is_correct %}success{% else %}danger{% endif %} badge-pill">
+                                    {% if question.is_correct %}✔{% else %}✘{% endif %}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% else %}
+                <div class="alert alert-danger text-center">
+                    <h4>No Submission Found</h4>
+                    <p>Please take the quiz first to view your results.</p>
+                    <a href="{% url 'quiz_list' %}" class="btn btn-primary">Go to Quizzes</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

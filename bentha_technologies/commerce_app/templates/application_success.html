@@ -1,0 +1,45 @@
+{% extends "home_master.html" %}
+{% block content %}
+<div class="container mt-5 text-center">
+    <div class="card shadow-lg p-4">
+        <div class="card-body">
+            <h1 class="display-4 text-success mb-4">
+                <i class="bi bi-check-circle-fill"></i> Application Submitted!
+            </h1>
+            <p class="lead mb-3">
+                Thank you for applying for the <strong>{{ career.title }}</strong> position at <strong>Bentha Technologies</strong>.
+            </p>
+            <p class="text-muted">
+                We appreciate your interest and will review your application shortly. If shortlisted, you will be contacted via email or phone.
+            </p>
+            <a href="{% url 'index' %}" class="btn btn-primary mt-3">
+                <i class="bi bi-house-fill"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+        background-color: #f9f9f9;
+    }
+    .card-body {
+        font-family: 'Roboto', sans-serif;
+    }
+    .display-4 {
+        font-weight: 700;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 50px;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}

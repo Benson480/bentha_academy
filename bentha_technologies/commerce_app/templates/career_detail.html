@@ -1,0 +1,86 @@
+{% extends "home_master.html" %}
+
+{% block title %}
+  {{ career.title }} | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<section class="section-career-detail" style="padding: 60px 0; background-color: #f9f9f9;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="career-title" style="color: #333; font-size: 2.5rem; font-weight: bold;">{{ career.title }}</h1>
+        <p class="career-published-date" style="color: #999;">Published on: {{ career.published_date|date:"F d, Y" }}</p>
+        
+        <div class="career-description" style="margin-top: 20px;">
+          <h4 style="color: #007bff;">Description:</h4>
+          <p style="color: #555;">{{ career.description|safe }}</p>
+        </div>
+        
+        <div class="career-requirements" style="margin-top: 20px;">
+          <h4 style="color: #007bff;">Requirements:</h4>
+          <p style="color: #555;">{{ career.requirements|safe }}</p>
+        </div>
+
+        <div class="career-responsibilities" style="margin-top: 20px;">
+          <h4 style="color: #007bff;">Responsibilities:</h4>
+          <p style="color: #555;">{{ career.responsibilities|safe }}</p>
+        </div>
+
+        <hr style="margin: 40px 0;">
+
+        <h3 style="color: #333; font-size: 1.75rem; font-weight: bold;">Apply for this position</h3>
+        
+        <form method="post" enctype="multipart/form-data" style="margin-top: 20px;">
+          {% csrf_token %}
+          {{ form.non_field_errors }}
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="display: flex; flex-direction: column;">
+              {{ form.full_name.label_tag }}
+              {{ form.full_name }}
+              {% for error in form.full_name.errors %}
+                <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+              {{ form.email.label_tag }}
+              {{ form.email }}
+              {% for error in form.email.errors %}
+                <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+              {{ form.phone_number.label_tag }}
+              {{ form.phone_number }}
+              {% for error in form.phone_number.errors %}
+                <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+              {{ form.resume.label_tag }}
+              {{ form.resume }}
+              {% for error in form.resume.errors %}
+                <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+
+            <div style="display: flex; flex-direction: column;">
+              {{ form.cover_letter.label_tag }}
+              {{ form.cover_letter }}
+              {% for error in form.cover_letter.errors %}
+                <div class="text-danger">{{ error }}</div>
+              {% endfor %}
+            </div>
+          </div>
+
+          <button type="submit" name="review" class="btn btn-primary" style="background-color: #007bff; padding: 10px 20px; border-radius: 5px; margin-top: 20px;">Review Application</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

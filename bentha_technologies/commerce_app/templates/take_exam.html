@@ -1,0 +1,124 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Take Exam | {{ exam.title }}
+{% endblock %}
+
+{% block content %}
+<section class="exam-section py-5">
+    <div class="container">
+        <header class="header mb-4 text-center" style="background-color: plum;">
+            <h1 class="text-primary">{{ exam.title }}</h1>
+            <p style="font-weight: bold;" class="lead">{{ exam.description }}</p>
+        </header>
+
+        <!-- Preparation Section -->
+        <div id="prep-section" class="text-center mb-5">
+            <h4 class="text-dark">Get ready to take the exam!</h4>
+            <p style="color: red; font-weight: bold;">You only have one attempt for this exam. Ensure you’re ready before starting.</p>
+            <button id="start-exam-btn" class="btn btn-success btn-lg">
+                <i class="fas fa-play"></i> Start Exam
+            </button>
+        </div>
+
+        <!-- Exam Form (Hidden Initially) -->
+        <form id="exam-form" method="post" style="display: none;">
+            {% csrf_token %}
+            
+            <!-- Progress Bar -->
+            <div class="progress mb-4">
+                <div id="progress-bar" class="progress-bar bg-primary" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+
+            <!-- Questions -->
+            {% for question in questions %}
+                <div class="form-group mb-5">
+                    <label for="question_{{ question.id }}" class="font-weight-bold">
+                        <i class="fas fa-question-circle text-primary"></i> {{ question.question_text }}
+                    </label>
+                    
+                    <!-- Answer Options (Randomized in model) -->
+                    {% for answer in question.get_shuffled_answers %}
+                        <div class="form-check">
+                            <input type="radio" 
+                                   id="question_{{ question.id }}_{{ forloop.counter }}" 
+                                   name="question_{{ question.id }}" 
+                                   value="{{ answer }}" 
+                                   class="form-check-input">
+                            <label for="question_{{ question.id }}_{{ forloop.counter }}" class="form-check-label">
+                                {{ answer }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <!-- Submit Button -->
+            <div class="text-center mt-5">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="fas fa-paper-plane"></i> Submit Exam
+                </button>
+            </div>
+        </form>
+
+        <!-- Back Button -->
+        <button style="align-items: center;" onclick="history.back()" class="btn btn-secondary" >
+            <i class="fas fa-arrow-left"></i> Back to Course
+        </button>
+    </div>
+</section>
+
+<!-- JavaScript -->
+<script>
+    // Show the form and hide the preparation section
+    document.getElementById('start-exam-btn').addEventListener('click', function() {
+        document.getElementById('prep-section').style.display = 'none';
+        document.getElementById('exam-form').style.display = 'block';
+        updateProgressBar();
+    });
+
+    // Update progress bar dynamically
+    function updateProgressBar() {
+        const totalQuestions = {{ questions|length }};
+        const form = document.getElementById('exam-form');
+        const progressBar = document.getElementById('progress-bar');
+
+        form.addEventListener('change', function () {
+            const answered = Array.from(form.querySelectorAll('input[type="radio"]:checked')).length;
+            const progress = (answered / totalQuestions) * 100;
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+        });
+    }
+</script>
+
+<!-- Styling -->
+<style>
+    .exam-section {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
+
+    .progress-bar {
+        transition: width 0.4s ease-in-out;
+    }
+
+    .form-group {
+        padding: 20px;
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+    }
+
+    .form-check-label {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .btn-lg {
+        padding: 10px 30px;
+    }
+</style>
+{% endblock %}

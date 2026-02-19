@@ -1,0 +1,133 @@
+{% extends "master.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg">
+                <!-- Card Header -->
+                <div class="card-header bg-gradient-primary text-white text-center">
+                    <h2 class="mb-0" style="color: black; font-weight: bold;">Place Your Order for {{ service.name }}</h2>
+                </div>
+
+                <!-- Card Body -->
+                <div class="card-body">
+                    <!-- Service Details -->
+                    <div class="text-center mb-4">
+                        <h4 class="text-success">Price: Ksh{{ service.price }}</h4>
+                        <p class="text-muted">Order today and enjoy premium service at an affordable price!</p>
+                    </div>
+
+                    <!-- Order Form -->
+                    <form id="orderForm">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="customerName" class="form-label">Your Name</label>
+                            {{ form.customer_name }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerEmail" class="form-label">Your Email</label>
+                            {{ form.customer_email }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="customerPhone" class="form-label">Phone Number</label>
+                            {{ form.customer_phone }}
+                        </div>
+
+                        <!-- Order Summary -->
+                        <hr>
+                        <div class="payment-summary mb-4">
+                            <h5 class="text-center">Order Summary</h5>
+                            <p><strong>Service:</strong> {{ service.name }}</p>
+                            <p><strong>Price:</strong> Ksh{{ service.price }}</p>
+                            <p><strong>Total:</strong> Ksh<span id="totalPrice">{{ service.price }}</span></p>
+                        </div>
+
+                        <!-- Discount Code Input -->
+                        <div class="mb-4">
+                            <label for="discountCode" class="form-label">Have a Discount Code?</label>
+                            <input type="text" id="discountCode" class="form-control" placeholder="Enter discount code" onkeyup="applyDiscount()">
+                            <small id="discountFeedback" class="form-text text-muted">Apply valid codes for discounts.</small>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'cyber_service_list' %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                            <button type="button" class="btn btn-primary" onclick="confirmOrder()">
+                                Confirm Order <i class="fas fa-shopping-cart"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Customer Reviews Section -->
+                <div class="card-footer text-center">
+                    <h5>What Our Customers Say</h5>
+                    <div class="customer-reviews mt-3">
+                        <div class="review">
+                            <p><strong>John Doe:</strong> Excellent service! ⭐⭐⭐⭐⭐</p>
+                        </div>
+                        <div class="review">
+                            <p><strong>Jane Smith:</strong> Very reliable. ⭐⭐⭐⭐⭐</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script>
+function applyDiscount() {
+    const discountCode = document.getElementById('discountCode').value.trim();
+    const discountFeedback = document.getElementById('discountFeedback');
+    const servicePrice = parseFloat("{{ service.price }}");
+    let totalPrice = servicePrice;
+
+    if (discountCode === "DISCOUNT10") {
+        totalPrice *= 0.9;
+        discountFeedback.textContent = "10% discount applied!";
+        discountFeedback.className = "form-text text-success";
+    } else if (discountCode) {
+        discountFeedback.textContent = "Invalid discount code.";
+        discountFeedback.className = "form-text text-danger";
+    } else {
+        discountFeedback.textContent = "Apply valid codes for discounts.";
+        discountFeedback.className = "form-text text-muted";
+    }
+
+    document.getElementById('totalPrice').textContent = totalPrice.toFixed(2);
+}
+
+function confirmOrder() {
+    const form = document.getElementById("orderForm");
+    const formData = new FormData(form);
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch(window.location.href, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrftoken
+        },
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === "success") {
+            alert("M-Pesa prompt sent. Enter your PIN.");
+            // Optional redirect or spinner
+        } else {
+            alert(data.message);
+        }
+    })
+    .catch(() => {
+        alert("Network error. Please try again.");
+    });
+
+}
+</script>
+
+{% endblock %}

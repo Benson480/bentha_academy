@@ -1,0 +1,58 @@
+{% extends "home_master.html" %}
+
+{% block title %}
+  Message Received | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<section style="background-color: #f9fafc; padding: 60px 0;">
+    <div class="container" style="max-width: 700px; margin: auto; text-align: center;">
+        <div class="thank-you-message" style="animation: fadeIn 1s ease-in-out;">
+            <h1 style="font-size: 2.8rem; font-weight: bold; color: #2d3436; margin-bottom: 10px;">
+                Thank You! 🙌
+            </h1>
+            <p style="font-size: 1.2rem; color: #636e72; margin: 10px 0 30px;">
+                Your message has been successfully received. We appreciate you reaching out and will respond shortly!
+            </p>
+            <a href="/" class="btn-home" style="display: inline-block; padding: 12px 25px; background: linear-gradient(45deg, #3498db, #2ecc71); color: #fff; font-size: 1rem; text-decoration: none; border-radius: 50px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: all 0.3s ease-in-out;">
+                Return to Home
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Smooth animations */
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Button hover effects */
+    .btn-home:hover {
+        background: linear-gradient(45deg, #2ecc71, #3498db);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        transform: scale(1.05);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+        p {
+            font-size: 1rem;
+        }
+        .btn-home {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}

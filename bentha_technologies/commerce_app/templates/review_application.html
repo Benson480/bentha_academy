@@ -1,0 +1,69 @@
+{% extends "home_master.html" %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg">
+        <div class="card-header text-center bg-primary text-white">
+            <h2 class="mb-0">Review Your Application</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">
+                    <strong>Full Name:</strong>
+                </div>
+                <div class="col-md-8">
+                    {{ application_data.full_name }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">
+                    <strong>Email:</strong>
+                </div>
+                <div class="col-md-8">
+                    {{ application_data.email }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">
+                    <strong>Phone Number:</strong>
+                </div>
+                <div class="col-md-8">
+                    {{ application_data.phone_number }}
+                </div>
+            </div>
+
+            {% if application_data.resume_url %}
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">
+                    <strong>Resume:</strong>
+                </div>
+                <div class="col-md-8">
+                    <a href="{{ application_data.resume_url }}" target="_blank" class="btn btn-link">View/Download</a>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if application_data.cover_letter_url %}
+            <div class="row mb-3">
+                <div class="col-md-4 text-muted">
+                    <strong>Cover Letter:</strong>
+                </div>
+                <div class="col-md-8">
+                    <a href="{{ application_data.cover_letter_url }}" target="_blank" class="btn btn-link">View/Download</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer text-center">
+            <form method="post" class="d-inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="bi bi-check-circle"></i> Submit Application
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

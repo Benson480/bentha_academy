@@ -1,0 +1,136 @@
+{% extends "master.html" %}
+
+{% block title %}
+    Learning Management | {{ course.name }} - Module {{ module_number }}
+{% endblock %}
+
+{% block content %}
+<section class="learning-management">
+    <div class="container">
+        <header class="learning-management-section header text-white text-center p-4 rounded">
+            <h1>{{ course.name }} - Module {{ module_number }}</h1>
+        </header>
+
+        <!-- Course Materials Section -->
+        <div class="learning-management-section mt-4">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">📚 Course Materials</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for material in materials %}
+                            <li class="list-group-item d-flex flex-column">
+                                <h4 class="font-weight-bold">{{ material.title }}</h4>
+                                {% if material.description %}
+                                    <p class="material-description">{{ material.description|safe }}</p>
+                                {% endif %}
+                                {% if material.content %}
+                                    <button class="btn btn-outline-info mt-2 toggle-content" data-target="#content-{{ forloop.counter }}">
+                                        🔽 Show Content
+                                    </button>
+                                    <div id="content-{{ forloop.counter }}" class="material-content hidden mt-2">
+                                        <div>{{ material.content|safe }}</div>
+                                    </div>
+                                {% endif %}
+                                {% if material.file %}
+                                    <a href="{{ material.file.url }}" class="btn btn-outline-primary mt-2" target="_blank">📥 Download Material</a>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quizzes, Assignments, Exams Sections -->
+        <div class="learning-management-section">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">📝 Quizzes</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for quiz in quizzes %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="font-weight-bold">{{ quiz.title }}</h4>
+                                </div>
+                                <a href="{% url 'take_quiz' quiz.id %}" class="btn btn-primary">▶️ Take Quiz</a>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">No quizzes available.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assignments Section -->
+        <div class="learning-management-section">
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-white">
+                    <h3 class="mb-0">📝 Assignments</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for assignment in assignments %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="font-weight-bold">{{ assignment.title }}</h4>
+                                    <p><strong>Due Date:</strong> {{ assignment.due_date }}</p>
+                                </div>
+                                <a href="{% url 'submit_assignment' assignment.id %}" class="btn btn-primary">📝 Submit</a>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">No assignments available.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exams Section -->
+        <div class="learning-management-section">
+            <div class="card shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">📋 Exams</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for exam in exams %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h4 class="font-weight-bold">{{ exam.title }}</h4>
+                                    <p><strong>Due Date:</strong> {{ exam.due_date }}</p>
+                                </div>
+                                <a href="{% url 'take_exam' exam.id %}" class="btn btn-primary">📋 Take Exam</a>
+                            </li>
+                        {% empty %}
+                            <li class="list-group-item">No exams available.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="learning-management-section">
+            <div class="card shadow-lg">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">📊 Your Progress</h3>
+                </div>
+                <div class="card-body">
+                    {% if progress %}
+                        <p>Progress: <strong>{{ progress.progress }}%</strong></p>
+                        <p><strong>Last updated:</strong> {{ progress.last_updated }}</p>
+                        <p><strong>Current Module:</strong> {{ progress.module_completed }}</p>
+                    {% else %}
+                        <p>No progress data available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

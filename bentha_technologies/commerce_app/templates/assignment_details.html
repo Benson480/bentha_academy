@@ -1,0 +1,64 @@
+{% extends "master.html" %}
+
+{% block title %}
+    Assignment Submitted | {{ assignment.title }}
+{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+    <!-- Assignment Header -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+            <h1 class="card-title fw-bold mb-3">
+                <i class="bi bi-journal-text"></i> {{ assignment.title }}
+            </h1>
+            <p class="mb-2"><strong>Description:</strong> <span class="text-muted">{{ assignment.description|safe }}</span></p>
+            <p class="mb-0"><strong>Due Date:</strong> 
+                <span class="badge bg-danger">{{ assignment.due_date|date:"F j, Y" }}</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Submission Status -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h2 class="fw-bold mb-3"><i class="bi bi-clipboard-check"></i> Submission Status</h2>
+
+            {% if submission %}
+                <div class="alert alert-success d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <div>
+                        <strong>Submitted:</strong> Yes <br>
+                        <strong>Score:</strong> {{ submission.score }} / {{ assignment.total_score }}<br>
+                        <strong>Submitted On:</strong> {{ submission.submitted_at|date:"F j, Y H:i" }}
+                    </div>
+                </div>
+
+                <!-- Submission Content -->
+                <h3 class="fw-semibold">Your Submission:</h3>
+                <div class="p-3 bg-light rounded" style="white-space: pre-wrap;">
+                    {{ submission.content|safe }}
+                </div>
+            {% else %}
+                <div class="alert alert-warning d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <div>
+                        <strong>Submitted:</strong> No
+                    </div>
+                </div>
+                <a href="{% url 'submit_assignment' assignment.id %}" class="btn btn-primary mt-2">
+                    <i class="bi bi-upload"></i> Submit Assignment
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back to Platform -->
+    <div class="mt-4">
+        <a href="{% url 'learning_management_platform' course_id=course_id %}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Learning Platform
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Exam Already Taken | {{ exam.title }}
+{% endblock %}
+
+{% block content %}
+<section class="exam-section py-5">
+  <div class="container text-center">
+    <h1 class="text-danger">
+      <i class="fas fa-ban"></i> Exam Already Taken
+    </h1>
+    <p class="lead">
+      You have already attempted <strong>{{ exam.title }}</strong>. 
+      Multiple attempts are not allowed.
+    </p>
+    
+    <!-- Optional: link to results page -->
+    <a href="{% url 'exam_results' exam.id user_profile.user.submission_set.last.id %}" 
+       class="btn btn-primary btn-lg mt-4">
+      <i class="fas fa-poll"></i> View Your Results
+    </a>
+
+    <!-- Back button -->
+    <a href="javascript:history.back()" class="btn btn-secondary btn-lg mt-4">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+  </div>
+</section>
+
+<style>
+  .exam-section {
+      background-color: #fff3f3;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+  }
+</style>
+{% endblock %}

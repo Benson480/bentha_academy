@@ -1,0 +1,207 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Take Quiz | {{ quiz.title }}
+{% endblock %}
+
+{% block content %}
+<section class="quiz-section">
+    <div class="container">
+        <!-- Quiz Header -->
+        <header class="quiz-header">
+            <h1>{{ quiz.title }}</h1>
+            <p style="color: #000;" class="quiz-description">{{ quiz.description }}</p>
+        </header>
+
+        <!-- Start and Back Buttons -->
+        <div id="start-section" class="text-center mb-4">
+            <button id="start-quiz-btn" class="btn btn-success">
+                <i class="fas fa-play"></i> Start Quiz
+            </button>
+            <a href="{% url 'learning_management_platform' course_id=course_id %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Course
+            </a>            
+        </div>
+
+        <!-- Quiz Form Section (Hidden Initially) -->
+        <form id="quiz-form" method="post" style="display: none;">
+            {% csrf_token %}
+            <div class="questions-list">
+                {% for question in questions %}
+                    <div class="form-group quiz-question">
+                        <h3 class="question-text">{{ question.question_text }}</h3>
+                        <div class="answers">
+                            <div class="answer-option">
+                                <input type="radio" id="question_{{ question.id }}_1" 
+                                       name="question_{{ question.id }}" 
+                                       value="{{ question.correct_answer }}" 
+                                       data-correct="true">
+                                <label for="question_{{ question.id }}_1" class="answer-label">{{ question.correct_answer }}</label>
+                            </div>
+
+                            {% for incorrect_answer in question.incorrect_answers %}
+                                <div class="answer-option">
+                                    <input type="radio" id="question_{{ question.id }}_{{ forloop.counter }}" 
+                                           name="question_{{ question.id }}" 
+                                           value="{{ incorrect_answer }}">
+                                    <label for="question_{{ question.id }}_{{ forloop.counter }}" class="answer-label">{{ incorrect_answer }}</label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="button" id="submit-quiz-btn" class="btn btn-primary">
+                    <i class="icon-submit"></i> Submit Quiz
+                </button>
+            </div>
+        </form>
+
+        <!-- Results Section -->
+        <div id="results-section" style="display: none; text-align: center; margin-top: 20px;">
+            <h2>Your Score: <span id="quiz-score"></span>/{{ questions|length }}</h2>
+            <button onclick="location.reload()" class="btn btn-success mt-3">Retake Quiz</button>
+        </div>
+    </div>
+</section>
+
+<script>
+    // JavaScript for Quiz Interaction
+    document.getElementById('start-quiz-btn').addEventListener('click', function() {
+        document.getElementById('start-section').style.display = 'none';
+        document.getElementById('quiz-form').style.display = 'block';
+    });
+
+    document.getElementById('submit-quiz-btn').addEventListener('click', function() {
+        const questions = document.querySelectorAll('.quiz-question');
+        let score = 0;
+
+        // Check answers
+        questions.forEach((question) => {
+            const selectedOption = question.querySelector('input[type="radio"]:checked');
+            if (selectedOption && selectedOption.dataset.correct === "true") {
+                score++;
+            }
+        });
+
+        // Display results
+        document.getElementById('quiz-form').style.display = 'none';
+        document.getElementById('results-section').style.display = 'block';
+        document.getElementById('quiz-score').textContent = score;
+    });
+</script>
+
+<style>
+/* General container styling */
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Header styling */
+.quiz-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.quiz-header h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.quiz-description {
+    font-size: 1.2em;
+    color: #666;
+}
+
+/* Questions and answers styling */
+.questions-list {
+    margin-bottom: 20px;
+}
+
+.quiz-question {
+    margin-bottom: 20px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.question-text {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.answer-option {
+    margin-bottom: 10px;
+}
+
+.answer-label {
+    margin-left: 5px;
+}
+
+/* Button styling */
+.form-actions {
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+/* Results Section */
+#results-section h2 {
+    font-size: 2em;
+    color: #333;
+}
+
+#quiz-score {
+    color: #28a745;
+    font-weight: bold;
+}
+</style>
+{% endblock %}

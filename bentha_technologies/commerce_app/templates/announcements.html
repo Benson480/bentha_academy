@@ -1,0 +1,49 @@
+{% extends "home_master.html" %}
+
+{% block title %}
+  Announcements | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+  <header style="background-color: #007BFF; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-radius: 10px;">
+    <i class="fas fa-bullhorn fa-3x" style="color: #fff;"></i>
+    <div style="text-align: right;">
+      <h2 style="color: #fff; font-size: 36px; font-weight: bold;">Announcements</h2>
+      <p style="color: #fff; font-size: 18px; opacity: 0.9; margin-top: 10px;">Stay Informed about our latest updates</p>
+    </div>
+  </header>
+
+  <div style="background-color: #f9f9f9; border-radius: 10px; padding: 20px; margin-top: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    {% if announcements %}
+        <ul style="list-style-type: none; padding: 0; margin: 0;">
+            {% for announcement in announcements %}
+                <li style="margin-bottom: 30px; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <h2 style="color: #007BFF; text-align: center;">{{ announcement.title }}</h2>
+                    <p style="font-size: 16px; line-height: 1.6;">{{ announcement.content }}</p>
+                    <p style="font-size: large; font-weight: bold; color: #007BFF; text-align: center;">Announcement Type: {{ announcement.get_announcement_type_display }}</p>
+                    {% if announcement.announcement_type == 'video' %}
+                        <p style="text-align: center;"><a href="{{ announcement.video_url }}" target="_blank" style="color: #007BFF; text-decoration: none;">Watch Video</a></p>
+                    {% elif announcement.announcement_type != 'video' and announcement.image %}
+                        <div style="text-align: center;">
+                            <img src="{{ announcement.image.url }}" alt="{{ announcement.image_description }}" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px;">
+                            <p style="color: #555; margin-top: 10px;">{{ announcement.image_description }}</p>
+                        </div>
+                    {% endif %}
+                    {% if announcement.countdown_to %}
+                        <p style="color: #007BFF; text-align: center; font-weight: bold;">Countdown to: {{ announcement.countdown_to }}</p>
+                    {% endif %}
+                    {% if announcement.venue %}
+                        <p style="color: #007BFF; text-align: center;">Venue: {{ announcement.venue }}</p>
+                    {% endif %}
+                    <p style="color: #007BFF; text-align: center;">Posted on: {{ announcement.timestamp }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div style="text-align: center; padding: 40px 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <h1 style="color: #555;">No announcements available at the moment.</h1>
+            <p style="color: #777;">Please check back later for updates.</p>
+        </div>
+    {% endif %}
+  </div>
+{% endblock %}

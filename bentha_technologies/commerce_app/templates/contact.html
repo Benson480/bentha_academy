@@ -1,0 +1,85 @@
+{% extends "home_master.html" %}
+
+{% block title %}
+  Contact Us | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<section id="contact" style="background-color: #f9fafc; padding: 60px 0;">
+    <div class="container" style="max-width: 900px; margin: auto;">
+        <!-- Header Section -->
+        <h1 style="text-align: center; font-size: 3rem; font-weight: bold; color: #2d3436; margin-bottom: 20px;">Contact Us</h1>
+        <p style="text-align: center; color: #636e72; font-size: 1.2rem; margin-bottom: 40px;">
+            Let’s get in touch! Whether you have a question or a project idea, we’re here to help.
+        </p>
+        
+        <!-- Contact Information -->
+        <div class="contact-info" style="display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 50px;">
+            <!-- Single Info Block -->
+            <div class="info-block" style="flex: 1; min-width: 250px; text-align: center;">
+                <div style="font-size: 3rem; color: #3498db; margin-bottom: 15px;">📍</div>
+                <h3 style="font-size: 1.5rem; font-weight: bold; color: #2d3436; margin-bottom: 10px;">Our Address</h3>
+                <p style="color: #636e72; font-size: 1rem;">
+                    2522 Duro, Naivasha,<br> Kenya 20117
+                </p>
+            </div>
+            <div class="info-block" style="flex: 1; min-width: 250px; text-align: center;">
+                <div style="font-size: 3rem; color: #e67e22; margin-bottom: 15px;">📞</div>
+                <h3 style="font-size: 1.5rem; font-weight: bold; color: #2d3436; margin-bottom: 10px;">Contact Number</h3>
+                <p style="color: #636e72; font-size: 1rem;">
+                    +254 742309044<br> +254 742723692
+                </p>
+            </div>
+            <div class="info-block" style="flex: 1; min-width: 250px; text-align: center;">
+                <div style="font-size: 3rem; color: #9b59b6; margin-bottom: 15px;">✉️</div>
+                <h3 style="font-size: 1.5rem; font-weight: bold; color: #2d3436; margin-bottom: 10px;">Email Us</h3>
+                <p style="color: #636e72; font-size: 1rem;">
+                    benthatechnologies@gmail.com<br> support@benthatechnologies.com
+                </p>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="contact-form-container" style="background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); animation: fadeIn 0.8s ease-in-out;">
+            <form method="POST" action="{% url 'contacts' %}" style="display: flex; flex-direction: column; gap: 20px;">
+                {% csrf_token %}
+                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="name" style="font-size: 1rem; color: #2d3436; margin-bottom: 5px; display: block;">Full Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your Name" required style="width: 100%; padding: 15px; border: 1px solid #dfe6e9; border-radius: 5px; font-size: 1rem;">
+                    </div>
+                    <div style="flex: 1; min-width: 250px;">
+                        <label for="email" style="font-size: 1rem; color: #2d3436; margin-bottom: 5px; display: block;">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="Your Email" required style="width: 100%; padding: 15px; border: 1px solid #dfe6e9; border-radius: 5px; font-size: 1rem;">
+                    </div>
+                </div>
+                <div>
+                    <label for="subject" style="font-size: 1rem; color: #2d3436; margin-bottom: 5px; display: block;">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Subject" required style="width: 100%; padding: 15px; border: 1px solid #dfe6e9; border-radius: 5px; font-size: 1rem;">
+                </div>
+                <div>
+                    <label for="message" style="font-size: 1rem; color: #2d3436; margin-bottom: 5px; display: block;">Message</label>
+                    <textarea id="message" name="message" placeholder="Your Message" rows="6" required style="width: 100%; padding: 15px; border: 1px solid #dfe6e9; border-radius: 5px; font-size: 1rem;"></textarea>
+                </div>
+                <button type="submit" style="align-self: flex-start; background: linear-gradient(135deg, #6c5ce7, #0984e3); color: #fff; padding: 15px 30px; border: none; border-radius: 5px; cursor: pointer; font-size: 1.2rem; font-weight: bold; transition: background 0.3s ease;">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Smooth Animation -->
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+{% endblock %}

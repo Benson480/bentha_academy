@@ -1,0 +1,247 @@
+{% extends "master.html" %}
+
+{% block title %}
+  Dashboard | Bentha Technologies
+{% endblock %}
+
+{% block content %}
+<section class="dashboard">
+  <div class="container-fluid">
+    <!-- Header -->
+    <header class="header">
+      <h1>Welcome to Bentha Technologies Course Dashboard</h1>
+      <p>Manage and track your courses efficiently</p>
+    </header>
+
+    <div class="row">
+      <!-- Courses Overview -->
+      <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-primary text-white d-flex align-items-center">
+            <i class="fas fa-book-open me-2"></i>
+            <h3 class="mb-0">Courses Overview</h3>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover table-bordered mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>Course Name</th>
+                  <th>Instructor</th>
+                  <th>Start Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for course in courses %}
+                <tr>
+                  <td><strong>{{ course.name }}</strong></td>
+                  <td>{{ course.instructor }}</td>
+                  <td>{{ course.start_date }}</td>
+                  <td>
+                    <span class="badge bg-{{ course.status|lower }}">{{ course.status }}</span>
+                  </td>
+                  <td>
+                    {% if user.is_authenticated %}
+                      {% if course.id in user_enrollments %}
+                        <a href="{% url 'learning_management_platform' course.id %}" class="btn btn-success btn-sm">
+                          <i class="fas fa-book-reader"></i> Access
+                        </a>
+                      {% else %}
+                        <form method="POST" action="{% url 'enroll_course' course.id %}" class="d-inline">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-plus"></i> Enroll
+                          </button>
+                        </form>
+                      {% endif %}
+                    {% else %}
+                      <a href="{% url 'login' %}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                      </a>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center text-muted">No courses available</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Classes -->
+      <div class="col-lg-6 col-md-12 mb-4">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-success text-white d-flex align-items-center">
+            <i class="fas fa-calendar-alt me-2"></i>
+            <h3 class="mb-0">Upcoming Classes</h3>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              {% for class in upcoming_classes %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ class.name }}
+                <span class="badge badge-primary">{{ class.start_date }}</span>
+              </li>
+              {% empty %}
+              <li class="list-group-item text-muted">No upcoming classes</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Progress -->
+      <div class="col-12 mb-4">
+        <div class="card shadow-lg border-0">
+          <div class="card-header bg-info text-white d-flex align-items-center">
+            <i class="fas fa-chart-line me-2"></i>
+            <h3 class="mb-0">Student Progress</h3>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover table-bordered mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th>Student Name</th>
+                  <th>Course</th>
+                  <th>Progress</th>
+                  <th>Last Updated</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for progress in student_progress %}
+                <tr>
+                  <td><strong>{{ progress.user.username }}</strong></td>
+                  <td>{{ progress.course.name }}</td>
+                  <td>
+                    <div class="progress">
+                      <div class="progress-bar bg-success" role="progressbar"
+                        style="width: {{ progress.progress|default:0|floatformat:0 }}%;"
+                        aria-valuenow="{{ progress.progress|default:0 }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ progress.progress|default:0 }}%
+                      </div>
+                    </div>
+                  </td>
+                  <td>{{ progress.last_updated }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="4" class="text-center text-muted">No progress data available</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dashboard {
+    background-color: #f8f9fa;
+    padding: 30px;
+    max-width: 100%;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: #343a40;
+    padding: 40px;
+    color: white;
+    border-radius: 5px;
+  }
+
+  .header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+
+  .header p {
+    font-size: 1.2rem;
+    color: #dcdcdc;
+  }
+
+  .card-header h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0;
+  }
+
+  .card-header i {
+    font-size: 1.6rem;
+    margin-right: 10px;
+  }
+
+  .table th,
+  .table td {
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .badge {
+    font-size: 0.9rem;
+    padding: 0.4em 0.8em;
+  }
+
+  .btn {
+    margin: 5px 0;
+  }
+
+  .progress {
+    height: 20px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+  }
+
+  .progress-bar {
+    line-height: 20px;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .header h1 {
+      font-size: 2rem;
+    }
+
+    .header p {
+      font-size: 1rem;
+    }
+
+    .card-header h3 {
+      font-size: 1.2rem;
+    }
+
+    .table th, .table td {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .header h1 {
+      font-size: 1.8rem;
+    }
+
+    .header p {
+      font-size: 0.9rem;
+    }
+
+    .table th, .table td {
+      font-size: 0.8rem;
+    }
+
+    .progress-bar {
+      font-size: 0.75rem;
+    }
+  }
+</style>
+{% endblock %}
