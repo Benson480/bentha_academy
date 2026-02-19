@@ -1,245 +1,205 @@
 {% extends "home_master.html" %}
 
 {% block title %}
-  Signup | Bentha Technologies
+Bentha Academy | Login & Signup
 {% endblock %}
 
 {% block content %}
-<section class="main_section" style="display: flex; flex-direction: row; height: 100vh; background-color: #f2f2f2;">
-    <!-- Login/Signup Interface Section -->
-    <div class="login_area_container" style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 20px;">
-        <div class="login_area">
-            <img class="logo-img" src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhEYp1Ms55GKpRiyGycyExeolQXvYImlI7vg&usqp=CAU' alt="logo-img" />
-            <form action="" method="post">
-                <h3 class="signup">Sign in to your Account</h3>
-                <ul>
-                    {% csrf_token %}
-                    <h5 style="color: #000;">{{ login_form.username.label_tag }} {{ login_form.username }} </h5>
-                    <label for="{{ login_form.password.id_for_label }}">
-                        <h5 style="color: #000;">{{ login_form.password.label_tag }}</h5>
-                    </label>
-                    <div class="password-field">
-                        {{ login_form.password }}
-                        <button type="button" id="showPasswordToggle" class="password-toggle-button" onclick="togglePasswordVisibility()" title="Show Password">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                    <div>
-                        <label for="remember_me" style="display: flex; color: #000;">
-                            <input type="checkbox" id="remember_me" name="remember_me" value="1"> Remember Me
-                        </label>
-                    </div>
-                    <div>
-                        <a class="forgotpassword" href="#" target="_blank" title="Forgot Password">Forgot your password?</a>
-                    </div>
-                    <button type="submit" title="Please Login Here">Log In</button>
-            
-                    <a href="#">Log in with Google</a>
-                </ul>
-            </form>
-            {% if login_form.errors %}
-            <div class="error-message">
-                <p>Login not successful. Please try again!</p>
-            </div>
-            {% endif %}
-            <div>
-                <h5 style="color: #000;">
-                    Don't Have An Account? Register
-                    <a href="#" id="showSignup" title="Register Here">Here</a>
-                </h5>
-            </div>
-        </div>
-    </div>
-    <!-- Image Section -->
-    <div class="image_section" style="flex: 1; background-image: url('https://cdn.pixabay.com/photo/2015/11/17/18/59/architecture-1048092_640.jpg'); background-size: cover; background-position: center;"></div>
-</section>
 
-<section class="signup_section" style="display: none; background-color: rgb(224, 191, 191); background-image: url('https://cdn.pixabay.com/photo/2015/11/17/18/59/architecture-1048092_640.jpg'); background-size: cover; background-position: center;">
-    <div class="container" style="padding: 80px;">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="login_area">
-                    <img class="logo-img" src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhEYp1Ms55GKpRiyGycyExeolQXvYImlI7vg&usqp=CAU' alt="logo-img" />
-                    <h3 class="signup" style="color: #ffffff; text-align: center; font-weight: bold;">Register Here</h3>
-                    <h5 class="question" style="text-align: center; color: #000;">Already Have An Account?
-                        <a href="/login" style="color: #0019fc;" title="Go back to Login Page">LogIn</a>
-                    </h5>
-                    <form method="post" style="font-weight: bold;">
-                        {% csrf_token %}
-                        {% for field in signup_form %}
-                        <div class="form-group" style="color: #000;">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            <div class="input-group" style="font-weight: bold;">
-                                {% if field.name != 'username' and field.name != 'email' %}
-                                <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="{{ field.label }}" {% if field.field.required %} required{% endif %}>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-secondary toggle-password-button" type="button">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                                {% else %}
-                                <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.html_name }}" placeholder="{{ field.label }}" {% if field.field.required %} required{% endif %}>
-                                {% endif %}
-                            </div>
-                            {% if signup_form.errors %}
-                            {% for error in field.errors %}
-                            <div class="error-message" style="color: red;">{{ error }}</div>
-                            {% endfor %}
-                            {% endif %}
-                        </div>
-                        {% endfor %}
-                        <button type="submit" style="background-color: blue; color: white; font-weight: bold;">Sign Up</button>
-                    </form>
+<div class="auth-wrapper">
+
+    <!-- LOGIN CARD -->
+    <div class="auth-card" id="loginCard">
+        <h2>Welcome Back 👋</h2>
+        <p class="subtitle">Login to continue learning</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>{{ login_form.username.label }}</label>
+                {{ login_form.username }}
+            </div>
+
+            <div class="form-group">
+                <label>{{ login_form.password.label }}</label>
+                <div class="password-field">
+                    {{ login_form.password }}
+                    <button type="button" onclick="togglePassword()" class="eye-btn">
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
             </div>
+
+            <div class="remember">
+                <label>
+                    <input type="checkbox" name="remember_me"> Remember me
+                </label>
+            </div>
+
+            <button class="auth-btn">Login</button>
+        </form>
+
+        {% if login_form.errors %}
+        <div class="error-box">
+            Invalid login credentials
         </div>
+        {% endif %}
+
+        <p class="switch-text">
+            Don’t have an account?
+            <a href="#" onclick="showSignup()">Create one</a>
+        </p>
     </div>
-</section>
+
+
+    <!-- SIGNUP CARD -->
+    <div class="auth-card" id="signupCard" style="display:none;">
+        <h2>Create Account 🚀</h2>
+        <p class="subtitle">Join Bentha Academy today</p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% for field in signup_form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}
+                    <div class="field-error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+
+            <button class="auth-btn">Sign Up</button>
+        </form>
+
+        <p class="switch-text">
+            Already have an account?
+            <a href="#" onclick="showLogin()">Login</a>
+        </p>
+    </div>
+
+</div>
+
 
 <style>
-    .login_area {
-        background-color: #fff;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        border-radius: 10px;
-        text-align: center;
-        max-width: 400px;
-        width: 100%;
-    }
 
-    .logo-img {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin-bottom: 20px;
-    }
+.auth-wrapper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:70vh;
+}
 
-    h3.signup {
-        background-color: #4c0c47;
-        color: #fff;
-        padding: 10px 0;
-        border-radius: 5px;
-    }
+.auth-card{
+    width:100%;
+    max-width:420px;
+    background:white;
+    padding:40px;
+    border-radius:18px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.15);
+    text-align:center;
+}
 
-    ul {
-        list-style: none;
-        padding: 0;
-    }
+.auth-card h2{
+    font-weight:700;
+}
 
-    h5 {
-        font-weight: bold;
-        margin: 0;
-    }
+.subtitle{
+    color:#777;
+    margin-bottom:30px;
+}
 
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
+.form-group{
+    text-align:left;
+    margin-bottom:20px;
+}
 
-    input[type="text"],
-    input[type="password"] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
+.form-group label{
+    font-weight:600;
+    margin-bottom:5px;
+    display:block;
+}
 
-    .password-field {
-        position: relative;
-    }
+.form-group input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
 
-    .password-toggle-button {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-    }
+.password-field{
+    position:relative;
+}
 
-    .error-message {
-        background-color: #ff6b6b;
-        color: #fff;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-    }
+.eye-btn{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:none;
+    cursor:pointer;
+}
 
-    button[type="submit"] {
-        width: 100%;
-        padding: 10px;
-        background-color: #4c0c47;
-        color: #fff;
-        font-weight: bold;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
+.auth-btn{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:linear-gradient(135deg,#ec4899,#2563eb);
+    color:white;
+    font-weight:600;
+    margin-top:10px;
+}
 
-    button[type="submit"]:hover {
-        background-color: #6d1472;
-    }
+.auth-btn:hover{
+    opacity:.9;
+}
 
-    h5 a {
-        color: blue;
-        text-decoration: underline;
-        font-weight: bold;
-    }
+.switch-text{
+    margin-top:20px;
+}
 
-    .password-field {
-        display: flex;
-        align-items: center;
-    }
+.switch-text a{
+    font-weight:600;
+    color:#2563eb;
+}
 
-    .password-toggle-button {
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-    }
+.error-box{
+    background:#ffdddd;
+    padding:10px;
+    border-radius:6px;
+    margin-top:15px;
+    color:#c00;
+}
+
+.field-error{
+    color:red;
+    font-size:13px;
+}
+
 </style>
 
+
 <script>
-    function togglePasswordVisibility() {
-        const passwordInput = document.getElementById("{{ login_form.password.id_for_label }}");
-        const passwordToggle = document.getElementById("showPasswordToggle");
 
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            passwordToggle.innerHTML = '<i class="fas fa-eye-slash"></i>';
-        } else {
-            passwordInput.type = "password";
-            passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
-        }
-    }
+function showSignup(){
+    document.getElementById("loginCard").style.display="none";
+    document.getElementById("signupCard").style.display="block";
+}
 
-    const toggleButtons = document.querySelectorAll(".toggle-password-button");
+function showLogin(){
+    document.getElementById("signupCard").style.display="none";
+    document.getElementById("loginCard").style.display="block";
+}
 
-    toggleButtons.forEach(button => {
-        button.addEventListener("click", function () {
-            const passwordInput = button.closest(".input-group").querySelector("input");
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
-                button.innerHTML = '<i class="fas fa-eye-slash"></i>';
-            } else {
-                passwordInput.type = "password";
-                button.innerHTML = '<i class="fas fa-eye"></i>';
-            }
-        });
-    });
+function togglePassword(){
+    const input=document.getElementById("{{ login_form.password.id_for_label }}");
+    input.type=input.type==="password"?"text":"password";
+}
 
-    document.getElementById("showSignup").addEventListener("click", function (event) {
-        event.preventDefault();
-        document.querySelector(".main_section").style.display = "none";
-        document.querySelector(".signup_section").style.display = "block";
-    });
-
-    document.getElementById("showLogin").addEventListener("click", function (event) {
-        event.preventDefault();
-        document.querySelector(".signup_section").style.display = "none";
-        document.querySelector(".main_section").style.display = "flex";
-    });
 </script>
+
 {% endblock %}
